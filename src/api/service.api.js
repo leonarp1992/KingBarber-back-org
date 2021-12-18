@@ -20,7 +20,7 @@ servicesApi.post('/create', async (req, res) => {
     if (service) {
       return res.json({success: false, message: 'Nombre no disponible'});
     }
-    service = new Service({name, price, status: 'ACTIVE'});
+    service = new Service({name,description, price, duration, status: 'ACTIVE'});
     await service.save();
     return res.json({success: true, service});
   } catch (error) {
