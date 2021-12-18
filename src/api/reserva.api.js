@@ -15,7 +15,7 @@ reservaApi.get('/', async (req, res) => {
 reservaApi.post('/create', async (req, res) => {
   try {
     const {id_user, id_service, id_barbero, date } = req.body;
-    let reserva = await Reserva.findOne({date});
+    let reserva = await Reserva.findOne({date, id_barbero});
     if (reserva) {
       return res.json({success: false, message: 'Fecha no disponible'});
     }

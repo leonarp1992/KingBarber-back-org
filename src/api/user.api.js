@@ -18,7 +18,7 @@ userApi.get('/', async (req, res) => {
 
 userApi.get('/barbers', async (req, res) => {
   try {
-    const users = await User.find({rol: 'barber'}).populate('services');
+    const users = await User.find({rol: 'barber'});
     return res.json({success: true, users})
   } catch (error) {
     res.status(500).json({success: false, message: error});
