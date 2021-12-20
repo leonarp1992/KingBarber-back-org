@@ -15,12 +15,13 @@ servicesApi.get('/', async (req, res) => {
 
 servicesApi.post('/create', async (req, res) => {
   try {
-    const {name, price} = req.body;
+    const {name, description, price, duration} = req.body;
+
     let service = await Service.findOne({name});
     if (service) {
       return res.json({success: false, message: 'Nombre no disponible'});
     }
-    service = new Service({name,description, price, duration, status: 'ACTIVE'});
+    service = new Service({name, description, price, duration, status: 'ACTIVO'});
     await service.save();
     return res.json({success: true, service});
   } catch (error) {

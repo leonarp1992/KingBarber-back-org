@@ -4,12 +4,24 @@ import Reserva from "../models/Reserva";
 const reservaApi = Router();
 
 reservaApi.get('/', async (req, res) => {
-  try {
-    const reservas = await Reserva.find();
-    return res.json({success: true, reservas})
-  } catch (error) {
-    res.status(500).json({success: false, message: error});
-  }
+  const {id_user} = req.query;
+  let idUser = await Reserva.find({id_user});
+  if(idUser){
+    try {
+      const reservas = await Reserva.find(id_user).populate(["id_user","id_service", "id_barbero"]);
+      return res.json({success: true, reservas})
+    } catch (error) {
+      res.status(500).json({success: false, message: error});
+    };
+  }else{
+    try {
+      const reservas = await Reserva.find();
+      return res.json({success: true, reservas})
+    } catch (error) {
+      res.status(500).json({success: false, message: error});
+    }
+  };
+  
 });
 
 reservaApi.post('/create', async (req, res) => {
@@ -24,7 +36,7 @@ reservaApi.post('/create', async (req, res) => {
     return res.json({success: true, reserva});
   } catch (error) {
     res.status(500).json({success: false, message: error});
-  }
+  };
 });
 
 export default reservaApi;
