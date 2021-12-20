@@ -21,7 +21,6 @@ reservaApi.get('/', async (req, res) => {
       res.status(500).json({success: false, message: error});
     }
   };
-  
 });
 
 reservaApi.post('/create', async (req, res) => {
