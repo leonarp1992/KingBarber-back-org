@@ -15,24 +15,21 @@ userApi.get('/', async (req, res) => {
   }
 });
 
-userApi.get('/barbers', async (req, res) => {
-  const withService = req.query;
-  if(withService){
-    try {
-      const users = await User.find({rol: 'barber'}).populate("services");
-      return res.json({success: true, users})
-    } catch (error) {
-      res.status(500).json({success: false, message: error});
+userApi.get("/barbers", async (req, res) => {
+  const { withService } = req.query;
+  try {
+    let users = [];
+    if (withService) {
+      users = await User.find({ rol: "barber" }).populate("services");
+    } else {
+      users = await User.find({ rol: "barber" });
     }
-  }else{
-    try {
-      const users = await User.find({rol: 'barber'});
-      return res.json({success: true, users})
-    } catch (error) {
-      res.status(500).json({success: false, message: error});
-    }
+    return res.json({ success: true, users });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
   }
 });
+
 
 userApi.post('/create', async (req, res) => {
   try {
