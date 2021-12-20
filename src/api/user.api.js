@@ -66,11 +66,20 @@ userApi.post('/createBarber', async (req, res) => {
     if (user) {
       return res.json({success: false, message: 'Email no disponible'});
     }
-    user = new User({name, email, password, rol: 'barber', services});
+    const salt = await bcrypt.genSalt(10);
+    const password1 = await bcrypt.hash(password, salt);
+    user = new User({name, email, password:password1, rol:"barber", services});
     await user.save();
-    return res.json({success: true, user});
+    jwt.sign(JSON.stringify(user), config.JWT_SECRET, {}, (error, token)=>{
+      if(error){
+        throw error;
+      }else{
+        return res.json({success: true, user, token}); 
+      }
+    });
   } catch (error) {
     res.status(500).json({success: false, message: error});
+    console.log(error)
   }
 });
 
