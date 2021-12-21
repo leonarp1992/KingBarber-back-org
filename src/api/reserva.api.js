@@ -18,6 +18,21 @@ reservaApi.get('/', async (req, res) => {
   };
 });
 
+reservaApi.get('/barber', async (req, res) => {
+  const {id_barbero} = req.query;
+  try {
+    let reservas = [];
+    if (id_barbero) {
+      reservas = await Reserva.find({id_barbero}).populate(["id_user", "id_service", "id_barbero"]);
+    } else {
+      reservas = await Reserva.find().populate(["id_user","id_service", "id_barbero"]);
+    }
+    return res.json({ success: true, reservas });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
+  };
+});
+
 reservaApi.post('/create', async (req, res) => {
   try {
     const {id_user, id_service, id_barbero, date } = req.body;
