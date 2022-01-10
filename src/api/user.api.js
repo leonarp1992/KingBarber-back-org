@@ -30,13 +30,23 @@ userApi.get("/barbers", async (req, res) => {
   }
 });
 
+userApi.post("/updatebarbers", async (req, res) => {
+  try {
+    const {id_Service, id_barber} = req.body;
+    if(id_barber) {
+      await User.updateOne({_id: id_barber}, { $set: {services: id_Service}});
+    }
+    return res.json({ success: true});
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
+  }
+});
 
 userApi.post('/create', async (req, res) => {
   try {
     const {name, email, password} = req.body;
     
     let user = await User.findOne({email});
-    console.log({user});
     if (user) {
       return res.json({success: false, message: 'Email no disponible'});
     }
