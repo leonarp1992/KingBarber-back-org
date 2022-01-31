@@ -24,10 +24,12 @@ reservaApi.get('/barber', async (req, res) => {
     let reservas = [];
     if (id_barbero) {
       reservas = await Reserva.find({id_barbero}).populate(["id_user", "id_service", "id_barbero"]);
-    } else {
-      reservas = await Reserva.find().populate(["id_user","id_service", "id_barbero"]);
     }
-    return res.json({ success: true, reservas });
+    if(reservas.length === 0){
+      return res.json({ success: false});
+    }else{
+      return res.json({ success: true, reservas });
+    }
   } catch (error) {
     res.status(500).json({ success: false, message: error });
   };
@@ -46,6 +48,19 @@ reservaApi.post('/create', async (req, res) => {
   } catch (error) {
     res.status(500).json({success: false, message: error});
   };
+});
+
+
+reservaApi.post('/edit', async (req, res) => {
+  try {
+    const {id_reserva, stated} = req.body;
+    if(id_reserva) {
+      await Reserva.updateOne({_id: id_reserva}, { $set: {estado: stated}});
+    }
+    return res.json({ success: true, message: 'Registro actualizado exitosamente'});
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
+  }
 });
 
 export default reservaApi;

@@ -32,9 +32,9 @@ userApi.get("/barbers", async (req, res) => {
 
 userApi.post("/updatebarbers", async (req, res) => {
   try {
-    const {id_Service, id_barber} = req.body;
+    const {id_service, id_barber} = req.body;
     if(id_barber) {
-      await User.updateOne({_id: id_barber}, { $set: {services: id_Service}});
+      await User.updateOne({_id: id_barber}, { $set: {services: [id_service]}});
     }
     return res.json({ success: true});
   } catch (error) {
